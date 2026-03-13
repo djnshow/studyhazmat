@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>위험물 암기표 — 나합격</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --card: #16161f;
+  --border: #2a2a3a;
+  --accent: #ff4d00;
+  --accent2: #ff8c00;
+  --accent3: #ffd700;
+  --green: #00e676;
+  --blue: #448aff;
+  --red: #ff1744;
+  --text: #e8e8f0;
+  --text2: #9090a8;
+  --text3: #5a5a72;
+  --lv1: #ff4d00;
+  --lv2: #ff8c00;
+  --lv3: #ffd700;
+  --grade1: #ff1744;
+  --grade2: #ff9100;
+  --grade3: #69f0ae;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND PATTERN ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,77,0,.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,215,0,.04) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+
+.hazard-bg {
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:.03;
+}
+.hazard-bg svg { width:100%; height:100%; }
+
+/* ── HEADER ── */
+header {
+  position:sticky; top:0; z-index:100;
+  background: rgba(10,10,15,.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.header-inner {
+  max-width:1400px; margin:0 auto;
+  display:flex; align-items:center; gap:20px;
+  height:64px;
+}
+.logo {
+  font-family:'Space Mono',monospace;
+  font-size:14px; font-weight:700;
+  color:var(--accent);
+  letter-spacing:-.02em;
+  white-space:nowrap;
+}
+.logo span { color:var(--accent3); }
+
+/* ── LEVEL TABS ── */
+.level-tabs {
+  display:flex; gap:4px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px; padding:4px;
+}
+.level-tab {
+  padding:7px 20px;
+  border-radius:7px;
+  border:none; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:13px; font-weight:700;
+  color:var(--text2);
+  background:transparent;
+  transition:all .2s;
+  letter-spacing:.02em;
+}
+.level-tab.active { color:#000; }
+.level-tab[data-lv="1"].active { background:var(--lv1); box-shadow:0 0 16px rgba(255,77,0,.4); }
+.level-tab[data-lv="2"].active { background:var(--lv2); box-shadow:0 0 16px rgba(255,140,0,.4); }
+.level-tab[data-lv="3"].active { background:var(--lv3); box-shadow:0 0 16px rgba(255,215,0,.4); }
+.level-tab[data-lv="4"].active { background:linear-gradient(135deg,#a855f7,#6366f1); color:#fff !important; box-shadow:0 0 16px rgba(168,85,247,.4); }
+.level-tab:not(.active):hover { color:var(--text); background:var(--border); }
+
+/* ── CARD ORDER TOGGLE ── */
+.card-order-toggle {
+  display:flex; align-items:center;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; padding:4px;
+}
+.order-btn {
+  padding:5px 14px; border-radius:7px; border:none; cursor:pointer;
+  font-size:12px; font-weight:600; color:var(--text2); background:transparent;
+  transition:all .2s; font-family:'Noto Sans KR',sans-serif; display:flex; align-items:center; gap:5px;
+}
+.order-btn.active { background:var(--accent); color:#fff; box-shadow:0 0 10px rgba(255,77,0,.3); }
+.order-btn:not(.active):hover { color:var(--text); }
+
+/* ── REACTION TAB ── */
+.rxn-page { display:none; }
+.rxn-page.active { display:block; }
+.rxn-banner {
+  margin-bottom:28px; padding:20px 28px;
+  background:var(--card); border:1px solid var(--border); border-radius:16px;
+  position:relative; overflow:hidden; display:flex; align-items:center; gap:16px;
+}
+.rxn-banner::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:linear-gradient(180deg,#a855f7,#6366f1); }
+.rxn-lv { font-family:'Space Mono',monospace; font-size:28px; font-weight:700; background:linear-gradient(135deg,#a855f7,#6366f1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.rxn-filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.rxn-filter-btn {
+  padding:5px 14px; border-radius:20px; border:1px solid var(--border);
+  cursor:pointer; font-size:12px; color:var(--text2); background:transparent;
+  transition:all .15s; font-family:'Noto Sans KR',sans-serif;
+}
+.rxn-filter-btn.active { border-color:#a855f7; color:#a855f7; background:rgba(168,85,247,.1); }
+.rxn-section { margin-bottom:32px; animation:fadeUp .4s ease both; }
+.rxn-section-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  padding-bottom:10px; border-bottom:1px solid var(--border);
+}
+.rxn-section-header h3 { font-size:14px; font-weight:700; }
+.rxn-count { font-family:'Space Mono',monospace; font-size:11px; color:var(--text3);
+  background:var(--bg3); border:1px solid var(--border); border-radius:20px; padding:2px 10px; }
+.rxn-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(520px,1fr)); gap:12px; }
+@media(max-width:600px) { .rxn-grid { grid-template-columns:1fr; } }
+.rxn-card {
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:16px 18px; transition:border-color .15s, transform .15s;
+}
+.rxn-card:hover { border-color:#a855f7; transform:translateY(-1px); }
+.rxn-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.rxn-substance { font-size:13px; font-weight:700; color:var(--text); }
+.rxn-freq {
+  font-family:'Space Mono',monospace; font-size:10px; font-weight:700;
+  padding:2px 8px; border-radius:4px; white-space:nowrap; flex-shrink:0;
+}
+.freq-high { background:rgba(255,23,68,.2); color:var(--red); border:1px solid rgba(255,23,68,.3); }
+.freq-mid  { background:rgba(255,145,0,.2); color:var(--accent2); border:1px solid rgba(255,145,0,.3); }
+.freq-low  { background:rgba(68,138,255,.2); color:var(--blue); border:1px solid rgba(68,138,255,.3); }
+.rxn-equation {
+  font-family:'Space Mono',monospace; font-size:13px;
+  color:#c4b5fd; line-height:1.7;
+  background:rgba(168,85,247,.05); border:1px solid rgba(168,85,247,.15);
+  border-radius:8px; padding:10px 14px; margin-bottom:8px;
+  word-break:break-all;
+}
+.rxn-desc { font-size:12px; color:var(--text2); line-height:1.6; }
+.rxn-condition { font-size:11px; color:var(--text3); margin-top:6px; font-style:italic; }
+.freq-stars { color:var(--accent3); font-size:12px; }
+
+/* ── MODE TABS ── */
+.mode-bar {
+  display:flex; gap:8px; margin-left:auto;
+}
+.mode-btn {
+  padding:7px 14px;
+  border-radius:7px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  font-size:12px; font-weight:500;
+  color:var(--text2);
+  background:transparent;
+  transition:all .2s;
+  display:flex; align-items:center; gap:6px;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.mode-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,77,0,.08); }
+.mode-btn:hover:not(.active) { border-color:var(--text3); color:var(--text); }
+.mode-btn .icon { font-size:14px; }
+
+/* ── MAIN ── */
+main {
+  position:relative; z-index:1;
+  max-width:1400px; margin:0 auto;
+  padding:32px 24px;
+}
+
+/* ── LEVEL BANNER ── */
+.level-banner {
+  margin-bottom:28px;
+  display:flex; align-items:center; gap:16px;
+  padding:20px 28px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  position:relative; overflow:hidden;
+}
+.level-banner::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0; width:4px;
+}
+.level-banner[data-lv="1"]::before { background:var(--lv1); }
+.level-banner[data-lv="2"]::before { background:var(--lv2); }
+.level-banner[data-lv="3"]::before { background:var(--lv3); }
+.banner-lv {
+  font-family:'Space Mono',monospace;
+  font-size:28px; font-weight:700;
+}
+.level-banner[data-lv="1"] .banner-lv { color:var(--lv1); }
+.level-banner[data-lv="2"] .banner-lv { color:var(--lv2); }
+.level-banner[data-lv="3"] .banner-lv { color:var(--lv3); }
+.banner-info h2 { font-size:16px; font-weight:700; margin-bottom:4px; }
+.banner-info p { font-size:13px; color:var(--text2); }
+.banner-stats {
+  margin-left:auto; display:flex; gap:24px;
+}
+.stat-item { text-align:center; }
+.stat-num { font-family:'Space Mono',monospace; font-size:22px; font-weight:700; color:var(--accent3); }
+.stat-label { font-size:11px; color:var(--text3); margin-top:2px; }
+
+/* ── SECTION HEADER ── */
+.section-block {
+  margin-bottom:32px;
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.section-block:nth-child(2) { animation-delay:.05s; }
+.section-block:nth-child(3) { animation-delay:.1s; }
+.section-block:nth-child(4) { animation-delay:.15s; }
+.section-block:nth-child(5) { animation-delay:.2s; }
+.section-block:nth-child(6) { animation-delay:.25s; }
+
+.section-title {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:14px;
+}
+.section-title h3 {
+  font-size:15px; font-weight:700;
+  display:flex; align-items:center; gap:8px;
+}
+.class-badge {
+  display:inline-flex; align-items:center;
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:11px; font-weight:700;
+  font-family:'Space Mono',monospace;
+  letter-spacing:.05em;
+}
+.badge-1 { background:rgba(255,77,0,.2); color:var(--lv1); border:1px solid rgba(255,77,0,.3); }
+.badge-2 { background:rgba(255,140,0,.2); color:var(--lv2); border:1px solid rgba(255,140,0,.3); }
+.badge-3 { background:rgba(255,215,0,.2); color:var(--lv3); border:1px solid rgba(255,215,0,.3); }
+.badge-4 { background:rgba(68,138,255,.2); color:var(--blue); border:1px solid rgba(68,138,255,.3); }
+.badge-5 { background:rgba(0,230,118,.2); color:var(--green); border:1px solid rgba(0,230,118,.3); }
+.badge-6 { background:rgba(255,23,68,.2); color:var(--red); border:1px solid rgba(255,23,68,.3); }
+.badge-ex { background:rgba(0,230,118,.15); color:var(--green); border:1px solid rgba(0,230,118,.3); }
+
+.hint-pill {
+  font-size:11px; color:var(--text3);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:20px; padding:3px 12px;
+  font-style:italic;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+table {
+  width:100%; border-collapse:collapse;
+  font-size:13px;
+}
+thead th {
+  background:var(--bg3);
+  padding:10px 14px;
+  text-align:center;
+  font-size:11px; font-weight:700;
+  color:var(--text3);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+tbody td {
+  padding:10px 14px;
+  border-bottom:1px solid rgba(42,42,58,.5);
+  text-align:center;
+  vertical-align:middle;
+  background:var(--card);
+  transition:background .15s;
+}
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:#1c1c28; }
+
+.qty-cell {
+  font-family:'Space Mono',monospace;
+  font-size:12px; font-weight:700;
+  color:var(--accent2);
+}
+.fml-cell {
+  font-family:'Space Mono',monospace;
+  font-size:12px; color:var(--blue);
+}
+.kind-cell { color:var(--text2); font-size:12px; }
+.name-cell { font-weight:500; }
+
+.grade-pill {
+  display:inline-block;
+  padding:2px 8px; border-radius:4px;
+  font-family:'Space Mono',monospace;
+  font-size:11px; font-weight:700;
+}
+.grade-I { background:rgba(255,23,68,.2); color:var(--grade1); }
+.grade-II { background:rgba(255,145,0,.2); color:var(--grade2); }
+.grade-III { background:rgba(105,240,174,.15); color:var(--grade3); }
+
+/* ── HIDDEN (퀴즈 모드) ── */
+.hidden-cell {
+  position:relative; cursor:pointer;
+}
+.hidden-cell .mask {
+  display:inline-block;
+  background:var(--bg3);
+  border:1px dashed var(--border);
+  border-radius:4px;
+  color:transparent;
+  user-select:none;
+  padding:2px 8px;
+  min-width:60px;
+  transition:all .2s;
+  position:relative;
+}
+.hidden-cell .mask::after {
+  content:'?';
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text3); font-size:14px;
+}
+.hidden-cell .mask.revealed {
+  background:rgba(0,230,118,.1);
+  border-color:var(--green);
+  color:var(--text);
+}
+.hidden-cell .mask.revealed::after { display:none; }
+
+/* ── CARD MODE ── */
+#card-mode {
+  display:none;
+}
+#card-mode.active { display:block; }
+.card-container {
+  display:flex; flex-direction:column; align-items:center;
+  gap:24px; padding:20px 0;
+}
+.flashcard {
+  width:100%; max-width:600px;
+  perspective:1200px;
+  cursor:pointer;
+}
+.flashcard-inner {
+  position:relative; width:100%; height:280px;
+  transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,.2,.2,1);
+}
+.flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
+.card-face {
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  border-radius:20px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:32px; gap:16px;
+}
+.card-front {
+  background:var(--card);
+  border:1px solid var(--border);
+}
+.card-back {
+  background:linear-gradient(135deg, #1a1a28, #12121c);
+  border:1px solid rgba(255,140,0,.3);
+  transform:rotateY(180deg);
+}
+.card-label {
+  font-size:11px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--text3);
+}
+.card-main {
+  font-size:28px; font-weight:700; text-align:center;
+  line-height:1.3;
+}
+.card-sub {
+  font-family:'Space Mono',monospace;
+  font-size:16px; color:var(--accent2);
+  text-align:center;
+}
+.card-fml {
+  font-family:'Space Mono',monospace;
+  font-size:18px; color:var(--blue);
+}
+.card-hint {
+  font-size:12px; color:var(--text3); text-align:center;
+}
+.card-nav {
+  display:flex; align-items:center; gap:16px;
+}
+.card-btn {
+  padding:12px 28px;
+  border-radius:10px; border:none; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:14px; font-weight:700;
+  transition:all .15s;
+}
+.btn-prev { background:var(--bg3); color:var(--text2); border:1px solid var(--border); }
+.btn-next { background:var(--accent); color:#fff; }
+.btn-prev:hover { border-color:var(--text); color:var(--text); }
+.btn-next:hover { background:var(--accent2); }
+.card-progress {
+  font-family:'Space Mono',monospace;
+  font-size:13px; color:var(--text3);
+  min-width:80px; text-align:center;
+}
+.card-result-btns {
+  display:flex; gap:12px;
+}
+.btn-know { background:rgba(0,230,118,.15); color:var(--green); border:1px solid rgba(0,230,118,.3); }
+.btn-dunno { background:rgba(255,23,68,.15); color:var(--red); border:1px solid rgba(255,23,68,.3); }
+.btn-know:hover { background:rgba(0,230,118,.25); }
+.btn-dunno:hover { background:rgba(255,23,68,.25); }
+
+.flip-hint {
+  font-size:12px; color:var(--text3);
+  display:flex; align-items:center; gap:6px;
+}
+
+/* ── QUIZ MODE ── */
+#quiz-mode { display:none; }
+#quiz-mode.active { display:block; }
+.quiz-wrap {
+  max-width:640px; margin:0 auto;
+  display:flex; flex-direction:column; gap:20px;
+}
+.quiz-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:28px;
+}
+.quiz-q { font-size:13px; color:var(--text3); margin-bottom:8px; }
+.quiz-question { font-size:20px; font-weight:700; margin-bottom:20px; }
+.quiz-options {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.quiz-opt {
+  padding:14px 16px;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; cursor:pointer;
+  font-size:14px; font-weight:500;
+  text-align:center; transition:all .15s;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.quiz-opt:hover { border-color:var(--accent2); color:var(--accent2); }
+.quiz-opt.correct { background:rgba(0,230,118,.15); border-color:var(--green); color:var(--green); }
+.quiz-opt.wrong { background:rgba(255,23,68,.1); border-color:var(--red); color:var(--red); }
+.quiz-opt.disabled { pointer-events:none; }
+.quiz-score {
+  display:flex; align-items:center; gap:16px;
+  padding:16px 20px;
+  background:var(--bg3); border-radius:12px;
+  border:1px solid var(--border);
+}
+.quiz-score-num {
+  font-family:'Space Mono',monospace;
+  font-size:24px; font-weight:700; color:var(--accent3);
+}
+.progress-bar-wrap {
+  flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden;
+}
+.progress-bar-fill {
+  height:100%; background:linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius:3px; transition:width .3s;
+}
+.quiz-next-btn {
+  padding:12px 32px; border-radius:10px; border:none;
+  background:var(--accent); color:#fff;
+  font-size:14px; font-weight:700; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:background .15s; align-self:center;
+}
+.quiz-next-btn:hover { background:var(--accent2); }
+
+/* ── TABLE MODE ── */
+#table-mode.active { display:block; }
+#table-mode { display:none; }
+
+/* ── TIPS PANEL ── */
+.tips-panel {
+  margin-bottom:28px;
+  background:var(--card); border:1px solid rgba(255,215,0,.2);
+  border-radius:16px; overflow:hidden;
+}
+.tips-header {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 20px; cursor:pointer;
+  background:rgba(255,215,0,.04);
+  border-bottom:1px solid rgba(255,215,0,.1);
+}
+.tips-header h3 { font-size:14px; font-weight:700; color:var(--accent3); }
+.tips-toggle { margin-left:auto; color:var(--text3); transition:transform .2s; }
+.tips-panel.open .tips-toggle { transform:rotate(180deg); }
+.tips-body {
+  display:none; padding:20px;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:14px;
+}
+.tips-panel.open .tips-body { display:grid; }
+.tip-card {
+  background:var(--bg3); border-radius:12px; padding:16px;
+  border:1px solid var(--border);
+}
+.tip-icon { font-size:24px; margin-bottom:8px; }
+.tip-title { font-size:13px; font-weight:700; margin-bottom:6px; }
+.tip-desc { font-size:12px; color:var(--text2); line-height:1.6; }
+
+/* ── SECTION CONTROLS ── */
+.section-controls {
+  display:flex; align-items:center; gap:12px; margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.filter-label { font-size:12px; color:var(--text3); }
+.filter-btn {
+  padding:5px 14px; border-radius:20px;
+  border:1px solid var(--border); cursor:pointer;
+  font-size:12px; color:var(--text2); background:transparent;
+  transition:all .15s; font-family:'Noto Sans KR',sans-serif;
+}
+.filter-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(255,77,0,.08); }
+
+/* ── QUIZ CONFIG ── */
+.quiz-config {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:28px; max-width:500px; margin:0 auto;
+  display:flex; flex-direction:column; gap:16px;
+}
+.quiz-config h3 { font-size:16px; font-weight:700; }
+.config-option { display:flex; align-items:center; gap:10px; }
+.config-option label { font-size:13px; color:var(--text2); flex:1; }
+.config-option select {
+  background:var(--bg3); border:1px solid var(--border);
+  color:var(--text); padding:6px 10px; border-radius:6px;
+  font-size:13px;
+}
+.start-quiz-btn {
+  padding:14px; border-radius:10px; border:none;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  color:#fff; font-size:15px; font-weight:700; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif; transition:opacity .15s;
+}
+.start-quiz-btn:hover { opacity:.85; }
+
+/* ── RESULT ── */
+.result-screen {
+  display:none; flex-direction:column; align-items:center; gap:20px;
+  padding:40px 20px; text-align:center;
+}
+.result-screen.show { display:flex; }
+.result-score-big {
+  font-family:'Space Mono',monospace;
+  font-size:64px; font-weight:700;
+}
+.result-msg { font-size:18px; font-weight:700; }
+.result-sub { font-size:14px; color:var(--text2); }
+.result-retry {
+  padding:14px 36px; border-radius:10px; border:none;
+  background:var(--accent); color:#fff;
+  font-size:15px; font-weight:700; cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:var(--bg2); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text3); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px) {
+  .header-inner { flex-wrap:wrap; height:auto; padding:12px 0; gap:8px; }
+  .mode-bar { width:100%; overflow-x:auto; }
+  .banner-stats { display:none; }
+  .quiz-options { grid-template-columns:1fr; }
+  .card-main { font-size:22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hazard pattern bg -->
+<div class="hazard-bg" aria-hidden="true">
+  <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="hp" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+        <text x="4" y="28" font-size="28" fill="currentColor">⚠</text>
+      </pattern>
+    </defs>
+    <rect width="200" height="200" fill="url(#hp)" color="white"/>
+  </svg>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">⚠ 위험물<span>암기</span></div>
+
+    <div class="level-tabs" id="levelTabs">
+      <button class="level-tab active" data-lv="1" onclick="setLevel(1)">LV.1 기초</button>
+      <button class="level-tab" data-lv="2" onclick="setLevel(2)">LV.2 중급</button>
+      <button class="level-tab" data-lv="3" onclick="setLevel(3)">LV.3 완성</button>
+      <button class="level-tab" data-lv="4" onclick="setLevel(4)">🧪 반응식 80</button>
+    </div>
+
+    <div class="mode-bar">
+      <button class="mode-btn active" data-mode="table" onclick="setMode('table')">
+        <span class="icon">📋</span> 전체표
+      </button>
+      <button class="mode-btn" data-mode="card" onclick="setMode('card')">
+        <span class="icon">🃏</span> 카드암기
+      </button>
+      <button class="mode-btn" data-mode="quiz" onclick="setMode('quiz')">
+        <span class="icon">⚡</span> 퀴즈
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- LEVEL BANNER -->
+  <div class="level-banner" id="lvBanner" data-lv="1">
+    <div class="banner-lv" id="bannerLv">LV.1</div>
+    <div class="banner-info">
+      <h2 id="bannerTitle">품명 + 지정수량 암기</h2>
+      <p id="bannerDesc">가장 기초가 되는 품명과 지정수량을 완벽히 익히세요</p>
+    </div>
+    <div class="banner-stats">
+      <div class="stat-item">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">전체 항목</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="statKnow" style="color:var(--green)">0</div>
+        <div class="stat-label">알고 있음</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="statDunno" style="color:var(--red)">0</div>
+        <div class="stat-label">더 봐야 함</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS PANEL -->
+  <div class="tips-panel" id="tipsPanel">
+    <div class="tips-header" onclick="toggleTips()">
+      <span>💡</span>
+      <h3>추천 학습법 — 자연스럽게 외우는 비법</h3>
+      <span class="tips-toggle">▼</span>
+    </div>
+    <div class="tips-body">
+      <div class="tip-card">
+        <div class="tip-icon">🔢</div>
+        <div class="tip-title">LV.1 → LV.2 → LV.3 순서로</div>
+        <div class="tip-desc">LV.1에서 품명+지정수량만 완벽히 익힌 뒤, LV.2에서 분자식을 추가하고, LV.3에서 위험등급까지 완성하세요. 단계를 건너뛰지 마세요.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🃏</div>
+        <div class="tip-title">카드 플립으로 능동적 회상</div>
+        <div class="tip-desc">품명을 보고 지정수량을 떠올리는 연습. 수동적으로 읽는 것보다 3배 이상 기억에 잘 남습니다. 틀린 카드는 별도로 모아 반복하세요.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🎵</div>
+        <div class="tip-title">힌트 문장을 리듬으로 외우기</div>
+        <div class="tip-desc">"우아라염 아브질 종과 오십전" 같은 힌트 문장을 자신만의 멜로디로 반복하면 장기기억에 저장됩니다. 리듬+이미지 결합이 핵심입니다.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">⚡</div>
+        <div class="tip-title">퀴즈로 약점 파악</div>
+        <div class="tip-desc">퀴즈 모드를 매일 10분씩 풀어보세요. 틀린 문제 위주로 집중 반복하면 시험 직전 빠른 점수 향상이 가능합니다.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📊</div>
+        <div class="tip-title">지정수량 묶음 기억법</div>
+        <div class="tip-desc">10kg(알킬류), 50kg(1류·3류), 100kg(2류황화인), 300kg(질산염류), 500kg(철분·마그), 1000kg(다이크로뮴), 10000L(동식물유)로 숫자별로 묶어 기억하세요.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🧪</div>
+        <div class="tip-title">분자식은 원소기호 이해부터</div>
+        <div class="tip-desc">외우기보다 이해하세요. K=칼륨, Na=나트륨, Fe=철, Mg=마그네슘을 알면 분자식이 자연스럽게 따라옵니다. KNO₃=질산칼륨처럼 뜻으로 이해.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE MODE -->
+  <div id="table-mode" class="active">
+    <div class="section-controls">
+      <span class="filter-label">필터:</span>
+      <button class="filter-btn active" onclick="filterClass('all', this)">전체</button>
+      <button class="filter-btn" onclick="filterClass('1', this)">1류</button>
+      <button class="filter-btn" onclick="filterClass('2', this)">2류</button>
+      <button class="filter-btn" onclick="filterClass('3', this)">3류</button>
+      <button class="filter-btn" onclick="filterClass('4', this)">4류</button>
+      <button class="filter-btn" onclick="filterClass('5', this)">5류</button>
+      <button class="filter-btn" onclick="filterClass('6', this)">6류</button>
+    </div>
+    <div id="tableContent"></div>
+  </div>
+
+  <!-- CARD MODE -->
+  <div id="card-mode">
+    <div class="card-container">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;">
+        <div class="flip-hint">🖱 카드를 클릭하면 뒤집혀요</div>
+        <div class="card-order-toggle">
+          <button class="order-btn active" id="orderSeq" onclick="setCardOrder('seq')">📋 순서대로</button>
+          <button class="order-btn" id="orderRnd" onclick="setCardOrder('rnd')">🔀 랜덤</button>
+        </div>
+      </div>
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="flashcard-inner">
+          <div class="card-face card-front">
+            <div class="card-label">품명</div>
+            <div class="card-main" id="cardFront">-</div>
+            <div class="card-hint">클릭해서 정답 확인</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-label">정답</div>
+            <div class="card-sub" id="cardBack">-</div>
+            <div class="card-fml" id="cardFml"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-result-btns" id="cardResultBtns" style="display:none">
+        <button class="card-btn btn-know" onclick="markCard(true)">✓ 알고 있어요</button>
+        <button class="card-btn btn-dunno" onclick="markCard(false)">✗ 다시 볼게요</button>
+      </div>
+      <div class="card-nav">
+        <button class="card-btn btn-prev" onclick="prevCard()">← 이전</button>
+        <div class="card-progress" id="cardProgress">0 / 0</div>
+        <button class="card-btn btn-next" onclick="nextCard()">다음 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div id="quiz-mode">
+    <div class="quiz-wrap" id="quizWrap">
+      <!-- Config screen -->
+      <div class="quiz-config" id="quizConfig">
+        <h3>⚡ 퀴즈 설정</h3>
+        <div class="config-option">
+          <label>문제 유형</label>
+          <select id="quizType">
+            <option value="qty">품명 → 지정수량</option>
+            <option value="name">지정수량 → 품명</option>
+            <option value="fml">품명 → 분자식 (LV2+)</option>
+            <option value="class">품명 → 위험물 류</option>
+          </select>
+        </div>
+        <div class="config-option">
+          <label>문제 수</label>
+          <select id="quizCount">
+            <option value="10">10문제</option>
+            <option value="20" selected>20문제</option>
+            <option value="30">30문제</option>
+          </select>
+        </div>
+        <button class="start-quiz-btn" onclick="startQuiz()">퀴즈 시작 →</button>
+      </div>
+
+      <!-- Quiz playing -->
+      <div id="quizPlaying" style="display:none; flex-direction:column; gap:20px;">
+        <div class="quiz-score">
+          <div>
+            <div class="quiz-score-num" id="quizScoreNum">0</div>
+            <div style="font-size:11px;color:var(--text3)">정답</div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="quizProgressBar" style="width:0%"></div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text3)" id="quizProgressTxt">0/0</div>
+        </div>
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-q" id="quizQ">다음 위험물의 지정수량은?</div>
+          <div class="quiz-question" id="quizQuestion">-</div>
+          <div class="quiz-options" id="quizOptions"></div>
+        </div>
+        <button class="quiz-next-btn" id="quizNextBtn" style="display:none" onclick="nextQuiz()">다음 문제 →</button>
+      </div>
+
+      <!-- Result -->
+      <div class="result-screen" id="quizResult">
+        <div class="result-score-big" id="resultScore" style="color:var(--accent3)">0/0</div>
+        <div class="result-msg" id="resultMsg">수고하셨습니다!</div>
+        <div class="result-sub" id="resultSub"></div>
+        <button class="result-retry" onclick="resetQuiz()">다시 도전</button>
+      </div>
+    </div>
+  </div>
+  <!-- REACTION PAGE (LV4) -->
+  <div id="rxn-page" class="rxn-page">
+    <div class="rxn-banner">
+      <div class="rxn-lv">RXN</div>
+      <div class="banner-info">
+        <h2>최다 출제 화학 반응식 80선 + 분말소화약제</h2>
+        <p>위험물산업기사 핵심 반응식 80개 + 분말소화약제(1·2·3·4종) 열분해 반응식</p>
+      </div>
+      <div class="banner-stats">
+        <div class="stat-item"><div class="stat-num" style="background:linear-gradient(135deg,#a855f7,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">80+14</div><div class="stat-label">총 반응식</div></div>
+        <div class="stat-item"><div class="stat-num" style="color:var(--red)">★★★</div><div class="stat-label">최빈출</div></div>
+      </div>
+    </div>
+    <div class="rxn-filter-bar" id="rxnFilterBar">
+      <button class="rxn-filter-btn active" onclick="filterRxn('all',this)">전체</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('1',this)">1류 산화성고체</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('2',this)">2류 가연성고체</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('3',this)">3류 자연발화</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('4',this)">4류 인화성액체</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('5',this)">5류 자기반응성</button>
+      <button class="rxn-filter-btn" onclick="filterRxn('6',this)">6류 산화성액체</button>
+      <button class="rxn-filter-btn" style="border-color:rgba(0,230,118,.3);color:var(--green)" onclick="filterRxn('ex',this)">🧯 분말소화약제</button>
+    </div>
+    <div id="rxnContent"></div>
+  </div>
+</main>
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const DATA = {
+  classes: [
+    {
+      id:'1', name:'제 1류 위험물', type:'산화성 고체',
+      badge:'badge-1', num:1,
+      hint:'힌트: 우아라염 아브질 종과 오십전',
+      items:[
+        {name:'무기과산화물', qty:'50kg', kind:'과산화칼륨, 과산화나트륨', fml:'K₂O₂, Na₂O₂', grade:'I'},
+        {name:'이염소산염류', qty:'50kg', kind:'이염소산나트륨', fml:'NaClO₂', grade:'I'},
+        {name:'과염소산염류', qty:'50kg', kind:'과염소산칼륨, 과염소산나트륨', fml:'KClO₄, NaClO₄', grade:'I'},
+        {name:'염소산염류', qty:'50kg', kind:'염소산칼륨, 염소산나트륨', fml:'KClO₃, NaClO₃', grade:'I'},
+        {name:'아이오딘산염류', qty:'300kg', kind:'아이오딘산칼륨', fml:'KIO₃', grade:'II'},
+        {name:'브로민산염류', qty:'300kg', kind:'브로민산암모늄', fml:'NH₄BrO₃', grade:'II'},
+        {name:'질산염류', qty:'300kg', kind:'질산칼륨, 질산나트륨, 질산암모늄', fml:'KNO₃, NaNO₃, NH₄NO₃', grade:'II'},
+        {name:'다이크로뮴산염류', qty:'1,000kg', kind:'다이크로뮴산칼륨', fml:'K₂Cr₂O₇', grade:'III'},
+        {name:'과망가니즈산염류', qty:'1,000kg', kind:'과망가니즈산칼륨', fml:'KMnO₄', grade:'III'},
+        {name:'차아염소산염류 (그외)', qty:'50kg', kind:'차아염소산염류', fml:'', grade:'I'},
+        {name:'과아이오딘산 (그외)', qty:'300kg', kind:'과아이오딘산', fml:'', grade:'II'},
+        {name:'아질산염류 (그외)', qty:'300kg', kind:'아질산염류', fml:'', grade:'II'},
+        {name:'크로뮴·납·아이오딘의산화물 (그외)', qty:'300kg', kind:'크로뮴,납,아이오딘의산화물', fml:'CrO₃', grade:'II'},
+        {name:'파옥소붕산염류 (그외)', qty:'300kg', kind:'파옥소붕산염류', fml:'', grade:'II'},
+        {name:'파옥소인화산염류 (그외)', qty:'300kg', kind:'파옥소인화산염류', fml:'', grade:'II'},
+        {name:'염소화이소사이아뉴르산 (그외)', qty:'300kg', kind:'염소화이소사이아뉴르산', fml:'', grade:'II'},
+      ]
+    },
+    {
+      id:'2', name:'제 2류 위험물', type:'가연성 고체',
+      badge:'badge-2', num:2,
+      hint:'힌트: 백황황적 오철마분 인화성고체',
+      items:[
+        {name:'황화인', qty:'100kg', kind:'삼황화인, 오황화인, 칠황화인', fml:'P₄S₃, P₂S₅, P₄S₇', grade:'II'},
+        {name:'황', qty:'100kg', kind:'황', fml:'S', grade:'II'},
+        {name:'적린', qty:'100kg', kind:'적린', fml:'P', grade:'II'},
+        {name:'철분', qty:'500kg', kind:'철분', fml:'Fe', grade:'III'},
+        {name:'마그네슘', qty:'500kg', kind:'마그네슘', fml:'Mg', grade:'III'},
+        {name:'금속분', qty:'500kg', kind:'알루미늄분, 아연분, 안티몬', fml:'Al, Zn, Sb', grade:'III'},
+        {name:'인화성고체', qty:'1,000kg', kind:'고형알코올', fml:'', grade:'III'},
+      ]
+    },
+    {
+      id:'3', name:'제 3류 위험물', type:'자연발화 및 금수성 물질',
+      badge:'badge-3', num:3,
+      hint:'힌트: 삼알칼리나 이향 오할도유기 삼금수인탄',
+      items:[
+        {name:'알킬알루미늄', qty:'10kg', kind:'트리이에틸알루미늄', fml:'(C₂H₅)₃Al', grade:'I'},
+        {name:'칼륨', qty:'10kg', kind:'칼륨', fml:'K', grade:'I'},
+        {name:'알킬리튬', qty:'10kg', kind:'알킬리튬', fml:'RLi', grade:'I'},
+        {name:'나트륨', qty:'10kg', kind:'나트륨', fml:'Na', grade:'I'},
+        {name:'황린', qty:'20kg', kind:'황린', fml:'P₄', grade:'I'},
+        {name:'알칼리금속', qty:'50kg', kind:'리튬, 루비듐, 칼슘, 바륨', fml:'Li, Rb, Ca, Ba', grade:'II'},
+        {name:'알칼리토금속', qty:'50kg', kind:'알칼리토금속', fml:'', grade:'II'},
+        {name:'유기금속화합물', qty:'50kg', kind:'유기금속화합물', fml:'', grade:'II'},
+        {name:'금속수소화합물', qty:'300kg', kind:'수소화칼슘, 수소화나트륨', fml:'CaH₂, NaH', grade:'III'},
+        {name:'금속인화합물', qty:'300kg', kind:'인화칼슘, 탄화칼슘, 탄화알루미늄', fml:'Ca₃P₂, CaC₂, Al₄C₃', grade:'III'},
+        {name:'칼슘·알루미늄탄화물', qty:'300kg', kind:'칼슘·알루미늄탄화물', fml:'', grade:'III'},
+        {name:'염소화규소화합물 (그외)', qty:'300kg', kind:'염소화규소화합물', fml:'', grade:'III'},
+      ]
+    },
+    {
+      id:'4', name:'제 4류 위험물', type:'인화성 액체',
+      badge:'badge-4', num:4,
+      hint:'힌트: 특이다산 알이히메를사와블벤사이아세파 알메에 제이비수크글스아포하',
+      items:[
+        {name:'특수인화물 - 이황화탄소', qty:'50L', kind:'이황화탄소', fml:'CS₂', grade:'I', sub:'특수인화물'},
+        {name:'특수인화물 - 다이에틸에터', qty:'50L', kind:'다이에틸에터', fml:'C₂H₅OC₂H₅', grade:'I', sub:'특수인화물'},
+        {name:'특수인화물 - 아세트알데히트', qty:'50L', kind:'아세트알데히트', fml:'CH₃CHO', grade:'I', sub:'특수인화물'},
+        {name:'특수인화물 - 산화프로필렌', qty:'50L', kind:'산화프로필렌', fml:'CH₃CHCH₂O', grade:'I', sub:'특수인화물'},
+        {name:'제1석유류(비) - 휘발유', qty:'200L', kind:'휘발유', fml:'', grade:'II', sub:'제1석유류'},
+        {name:'제1석유류(비) - 메틸에틸케톤', qty:'200L', kind:'메틸에틸케톤', fml:'CH₃COCH₃', grade:'II', sub:'제1석유류'},
+        {name:'제1석유류(비) - 톨루엔', qty:'200L', kind:'톨루엔', fml:'C₆H₅CH₃', grade:'II', sub:'제1석유류'},
+        {name:'제1석유류(비) - 벤젠', qty:'200L', kind:'벤젠', fml:'C₆H₆', grade:'II', sub:'제1석유류'},
+        {name:'제1석유류(수) - 아세톤', qty:'400L', kind:'아세톤', fml:'CH₃COCH₃', grade:'II', sub:'제1석유류'},
+        {name:'제1석유류(수) - 피리딘', qty:'400L', kind:'피리딘', fml:'C₅H₅N', grade:'II', sub:'제1석유류'},
+        {name:'알코류 - 메탄올', qty:'400L', kind:'메탄올', fml:'CH₃OH', grade:'II', sub:'알코류'},
+        {name:'알코류 - 에탄올', qty:'400L', kind:'에탄올', fml:'C₂H₅OH', grade:'II', sub:'알코류'},
+        {name:'제2석유류(비) - 등유', qty:'1,000L', kind:'등유', fml:'', grade:'III', sub:'제2석유류'},
+        {name:'제2석유류(비) - 경유', qty:'1,000L', kind:'경유', fml:'', grade:'III', sub:'제2석유류'},
+        {name:'제2석유류(비) - 크실렌', qty:'1,000L', kind:'크실렌', fml:'C₆H₄(CH₃)₂', grade:'III', sub:'제2석유류'},
+        {name:'제2석유류(수) - 아세트산', qty:'2,000L', kind:'아세트산', fml:'CH₃COOH', grade:'III', sub:'제2석유류'},
+        {name:'제3석유류(비) - 크레오소트유', qty:'2,000L', kind:'크레오소트유', fml:'', grade:'III', sub:'제3석유류'},
+        {name:'제3석유류(비) - 아닐린', qty:'2,000L', kind:'아닐린', fml:'C₆H₅NH₂', grade:'III', sub:'제3석유류'},
+        {name:'제3석유류(비) - 나이트로벤젠', qty:'2,000L', kind:'나이트로벤젠', fml:'C₆H₅NO₂', grade:'III', sub:'제3석유류'},
+        {name:'제3석유류(수) - 글리세린', qty:'4,000L', kind:'글리세린', fml:'C₃H₅(OH)₃', grade:'III', sub:'제3석유류'},
+        {name:'제4석유류 - 윤활유', qty:'6,000L', kind:'윤활유', fml:'', grade:'III', sub:'제4석유류'},
+        {name:'제4석유류 - 기어유', qty:'6,000L', kind:'기어유', fml:'', grade:'III', sub:'제4석유류'},
+        {name:'동식물유 - 대구유(건성)', qty:'10,000L', kind:'대구유', fml:'', grade:'III', sub:'동식물유'},
+        {name:'동식물유 - 올리브유(반건성)', qty:'10,000L', kind:'올리브유', fml:'', grade:'III', sub:'동식물유'},
+        {name:'동식물유 - 야자유(불건성)', qty:'10,000L', kind:'야자유', fml:'', grade:'III', sub:'동식물유'},
+      ]
+    },
+    {
+      id:'5', name:'제 5류 위험물', type:'자기반응성 물질',
+      badge:'badge-5', num:5,
+      hint:'',
+      items:[
+        {name:'질산에스터류', qty:'-', kind:'질산메틸, 질산에틸, 나이트로글리세린, 나이트로셀룰로오스', fml:'', grade:''},
+        {name:'유기과산화물', qty:'-', kind:'유기과산화물', fml:'', grade:''},
+        {name:'하이드록실아민', qty:'제1종 10kg', kind:'하이드록실아민', fml:'NH₂OH', grade:''},
+        {name:'하이드록실아민염류', qty:'제2종 100kg', kind:'하이드록실아민염류', fml:'', grade:''},
+        {name:'나이트로화합물', qty:'-', kind:'트리아이트로톨루엔(TNT)', fml:'CH₃(NO₂)₃', grade:''},
+        {name:'나이트로소화합물', qty:'-', kind:'트리아이트로페놀(피크린산 TNP)', fml:'C₆H₂(NO₂)₃OH', grade:''},
+        {name:'아조화합물', qty:'-', kind:'아조화합물', fml:'', grade:''},
+        {name:'다이아조화합물', qty:'-', kind:'다이아조화합물', fml:'', grade:''},
+        {name:'하이드라진유도체', qty:'-', kind:'하이드라진유도체', fml:'', grade:''},
+        {name:'금속의아지화합물', qty:'-', kind:'금속의아지화합물', fml:'', grade:''},
+        {name:'질산구아니딘', qty:'-', kind:'질산구아니딘', fml:'', grade:''},
+        {name:'그 외', qty:'200kg', kind:'그 외', fml:'', grade:''},
+      ]
+    },
+    {
+      id:'6', name:'제 6류 위험물', type:'산화성 액체',
+      badge:'badge-6', num:6,
+      hint:'',
+      items:[
+        {name:'질산', qty:'300kg', kind:'질산', fml:'HNO₃', grade:'I'},
+        {name:'과산화수소', qty:'300kg', kind:'과산화수소', fml:'H₂O₂', grade:'I'},
+        {name:'과염소산', qty:'300kg', kind:'과염소산', fml:'HClO₄', grade:'I'},
+        {name:'할로겐간화합물 (그외)', qty:'300kg', kind:'할로겐간화합물', fml:'', grade:'I'},
+      ]
+    }
+  ]
+};
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let currentLevel = 1;
+let currentMode = 'table';
+let currentFilter = 'all';
+let cardIndex = 0;
+let cardFlipped = false;
+let knownCards = new Set();
+let unknownCards = new Set();
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizType = 'qty';
+let quizTotal = 20;
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
+function getAllItems() {
+  let items = [];
+  DATA.classes.forEach(cls => {
+    cls.items.forEach(item => {
+      items.push({...item, classId: cls.id, className: cls.name, classType: cls.type});
+    });
+  });
+  return items;
+}
+
+function getFilteredItems() {
+  const all = getAllItems();
+  if (currentFilter === 'all') return all;
+  return all.filter(i => i.classId === currentFilter);
+}
+
+// ══════════════════════════════════════════════════
+// LEVEL / MODE
+// ══════════════════════════════════════════════════
+function setLevel(lv) {
+  currentLevel = lv;
+  document.querySelectorAll('.level-tab').forEach(t => {
+    t.classList.toggle('active', +t.dataset.lv === lv);
+  });
+
+  // Show/hide main content vs rxn page
+  const isRxn = lv === 4;
+  document.getElementById('lvBanner').style.display = isRxn ? 'none' : '';
+  document.getElementById('tipsPanel').style.display = isRxn ? 'none' : '';
+  document.querySelector('.section-controls') && (document.querySelector('.section-controls').style.display = isRxn ? 'none' : '');
+  document.getElementById('table-mode').style.display = isRxn ? 'none' : '';
+  // hide card/quiz too when rxn
+  if (isRxn) {
+    document.getElementById('card-mode').classList.remove('active');
+    document.getElementById('quiz-mode').classList.remove('active');
+    document.getElementById('table-mode').classList.remove('active');
+    document.querySelector('.mode-bar').style.opacity = '0.3';
+    document.querySelector('.mode-bar').style.pointerEvents = 'none';
+    document.getElementById('rxn-page').classList.add('active');
+    renderRxn('all');
+    return;
+  }
+  document.getElementById('rxn-page').classList.remove('active');
+  document.querySelector('.mode-bar').style.opacity = '';
+  document.querySelector('.mode-bar').style.pointerEvents = '';
+
+  const banner = document.getElementById('lvBanner');
+  banner.dataset.lv = lv;
+  document.getElementById('bannerLv').textContent = `LV.${lv}`;
+  const info = [
+    {title:'품명 + 지정수량 암기', desc:'가장 기초가 되는 품명과 지정수량을 완벽히 익히세요'},
+    {title:'품명 + 지정수량 + 위험물종류 + 분자식', desc:'품명에 해당하는 구체적인 물질과 분자식까지 확장하세요'},
+    {title:'위험등급 + 전체 정보 완성', desc:'위험등급(I·II·III)까지 포함한 모든 정보를 완성하세요'},
+  ][lv-1];
+  document.getElementById('bannerTitle').textContent = info.title;
+  document.getElementById('bannerDesc').textContent = info.desc;
+  updateStats();
+  renderCurrentMode();
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  document.getElementById('table-mode').classList.toggle('active', mode === 'table');
+  document.getElementById('card-mode').classList.toggle('active', mode === 'card');
+  document.getElementById('quiz-mode').classList.toggle('active', mode === 'quiz');
+  renderCurrentMode();
+}
+
+function renderCurrentMode() {
+  if (currentMode === 'table') renderTable();
+  else if (currentMode === 'card') initCards();
+  else if (currentMode === 'quiz') resetQuiz();
+}
+
+// ══════════════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════════════
+function updateStats() {
+  const total = getAllItems().length;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statKnow').textContent = knownCards.size;
+  document.getElementById('statDunno').textContent = unknownCards.size;
+}
+
+// ══════════════════════════════════════════════════
+// TABLE RENDER
+// ══════════════════════════════════════════════════
+function renderTable() {
+  const container = document.getElementById('tableContent');
+  container.innerHTML = '';
+
+  const filtered = currentFilter === 'all' ? DATA.classes : DATA.classes.filter(c => c.id === currentFilter);
+
+  filtered.forEach((cls, i) => {
+    const block = document.createElement('div');
+    block.className = 'section-block';
+    block.style.animationDelay = `${i * 0.05}s`;
+    block.dataset.class = cls.id;
+
+    // Section title
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'section-title';
+    titleDiv.innerHTML = `
+      <h3>
+        <span class="class-badge ${cls.badge}">${cls.num}류</span>
+        ${cls.name} <span style="color:var(--text3);font-weight:400">— ${cls.type}</span>
+      </h3>
+      ${cls.hint ? `<span class="hint-pill">${cls.hint}</span>` : ''}
+    `;
+    block.appendChild(titleDiv);
+
+    // Table
+    const wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    let cols = buildCols();
+    let html = `<table><thead><tr>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead><tbody>`;
+
+    cls.items.forEach(item => {
+      html += `<tr>`;
+      cols.forEach(col => {
+        html += buildCell(item, col.key);
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table>`;
+    wrap.innerHTML = html;
+    block.appendChild(wrap);
+    container.appendChild(block);
+  });
+}
+
+function buildCols() {
+  const base = [{key:'name', label:'품명'}, {key:'qty', label:'지정수량'}];
+  if (currentLevel >= 2) base.push({key:'kind', label:'위험물종류'}, {key:'fml', label:'분자식'});
+  if (currentLevel >= 3) base.unshift({key:'grade', label:'위험등급'});
+  return base;
+}
+
+function buildCell(item, key) {
+  if (key === 'name') return `<td class="name-cell">${item.name}</td>`;
+  if (key === 'qty') return `<td class="qty-cell">${item.qty}</td>`;
+  if (key === 'kind') return `<td class="kind-cell">${item.kind || '-'}</td>`;
+  if (key === 'fml') return `<td class="fml-cell">${item.fml || '-'}</td>`;
+  if (key === 'grade') {
+    const g = item.grade;
+    return `<td>${g ? `<span class="grade-pill grade-${g}">${g}</span>` : '-'}</td>`;
+  }
+  return '<td>-</td>';
+}
+
+// ══════════════════════════════════════════════════
+// FILTER
+// ══════════════════════════════════════════════════
+function filterClass(cls, btn) {
+  currentFilter = cls;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+// ══════════════════════════════════════════════════
+// CARD MODE
+// ══════════════════════════════════════════════════
+let cardDeck = [];
+let cardOrder = 'seq'; // 'seq' | 'rnd'
+let cardOriginalDeck = [];
+
+function setCardOrder(order) {
+  cardOrder = order;
+  document.getElementById('orderSeq').classList.toggle('active', order === 'seq');
+  document.getElementById('orderRnd').classList.toggle('active', order === 'rnd');
+  if (order === 'rnd') {
+    // Fisher-Yates shuffle
+    const arr = [...cardOriginalDeck];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    cardDeck = arr;
+  } else {
+    cardDeck = [...cardOriginalDeck];
+  }
+  cardIndex = 0;
+  showCard();
+}
+
+function initCards() {
+  cardOriginalDeck = getAllItems().filter(i => i.qty !== '-');
+  cardDeck = [...cardOriginalDeck];
+  cardIndex = 0;
+  cardFlipped = false;
+  // apply current order
+  setCardOrder(cardOrder);
+}
+
+function showCard() {
+  if (!cardDeck.length) return;
+  const item = cardDeck[cardIndex];
+  document.getElementById('cardFront').textContent = item.name;
+
+  let back = `지정수량: ${item.qty}`;
+  document.getElementById('cardBack').textContent = back;
+
+  let fmlText = '';
+  if (currentLevel >= 2 && item.fml) fmlText = item.fml;
+  if (currentLevel >= 2 && item.kind) fmlText = `${item.kind}\n${fmlText}`;
+  document.getElementById('cardFml').textContent = fmlText;
+
+  document.getElementById('cardProgress').textContent = `${cardIndex+1} / ${cardDeck.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('cardResultBtns').style.display = 'none';
+  cardFlipped = false;
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  fc.classList.toggle('flipped');
+  cardFlipped = !cardFlipped;
+  if (cardFlipped) {
+    document.getElementById('cardResultBtns').style.display = 'flex';
+  }
+}
+
+function markCard(known) {
+  const item = cardDeck[cardIndex];
+  if (known) { knownCards.add(item.name); unknownCards.delete(item.name); }
+  else { unknownCards.add(item.name); knownCards.delete(item.name); }
+  updateStats();
+  nextCard();
+}
+
+function nextCard() {
+  cardIndex = (cardIndex + 1) % cardDeck.length;
+  showCard();
+}
+function prevCard() {
+  cardIndex = (cardIndex - 1 + cardDeck.length) % cardDeck.length;
+  showCard();
+}
+
+// ══════════════════════════════════════════════════
+// QUIZ MODE
+// ══════════════════════════════════════════════════
+function resetQuiz() {
+  quizIndex = 0; quizScore = 0;
+  document.getElementById('quizConfig').style.display = 'flex';
+  document.getElementById('quizPlaying').style.display = 'none';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('quizConfig').style.flexDirection = 'column';
+}
+
+function startQuiz() {
+  quizType = document.getElementById('quizType').value;
+  quizTotal = +document.getElementById('quizCount').value;
+
+  const pool = getAllItems().filter(i => {
+    if (quizType === 'fml') return i.fml && i.fml !== '-';
+    return i.qty && i.qty !== '-';
+  });
+
+  // shuffle & pick
+  const shuffled = pool.sort(() => Math.random() - .5);
+  quizQuestions = shuffled.slice(0, quizTotal);
+  quizIndex = 0; quizScore = 0;
+
+  document.getElementById('quizConfig').style.display = 'none';
+  document.getElementById('quizPlaying').style.display = 'flex';
+  document.getElementById('quizResult').classList.remove('show');
+  showQuizQuestion();
+}
+
+function showQuizQuestion() {
+  if (quizIndex >= quizQuestions.length) {
+    showQuizResult(); return;
+  }
+  const q = quizQuestions[quizIndex];
+  const total = quizQuestions.length;
+  document.getElementById('quizProgressTxt').textContent = `${quizIndex+1}/${total}`;
+  document.getElementById('quizProgressBar').style.width = `${(quizIndex/total)*100}%`;
+
+  let questionText = q.name;
+  let correctAnswer = '';
+  let qLabel = '';
+
+  if (quizType === 'qty') { correctAnswer = q.qty; qLabel = '다음 위험물의 지정수량은?'; }
+  else if (quizType === 'name') { questionText = q.qty; correctAnswer = q.name; qLabel = '다음 지정수량을 가진 위험물은?'; }
+  else if (quizType === 'fml') { correctAnswer = q.fml; qLabel = '다음 위험물의 분자식은?'; }
+  else if (quizType === 'class') { correctAnswer = `제${q.classId}류`; qLabel = '다음 위험물이 속하는 류는?'; }
+
+  document.getElementById('quizQ').textContent = qLabel;
+  document.getElementById('quizQuestion').textContent = questionText;
+
+  // Build wrong options
+  const allPool = getAllItems();
+  let wrongs = [];
+  if (quizType === 'qty') wrongs = [...new Set(allPool.map(i=>i.qty))].filter(v=>v!==correctAnswer && v!=='-');
+  else if (quizType === 'name') wrongs = [...new Set(allPool.map(i=>i.name))].filter(v=>v!==correctAnswer);
+  else if (quizType === 'fml') wrongs = [...new Set(allPool.map(i=>i.fml).filter(Boolean))].filter(v=>v!==correctAnswer);
+  else if (quizType === 'class') wrongs = ['제1류','제2류','제3류','제4류','제5류','제6류'].filter(v=>v!==correctAnswer);
+
+  wrongs = wrongs.sort(()=>Math.random()-.5).slice(0,3);
+  const options = [correctAnswer, ...wrongs].sort(()=>Math.random()-.5);
+
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('div');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(btn, opt, correctAnswer);
+    container.appendChild(btn);
+  });
+  document.getElementById('quizNextBtn').style.display = 'none';
+}
+
+function selectAnswer(btn, selected, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.classList.add('disabled');
+    if (b.textContent === correct) b.classList.add('correct');
+  });
+  if (selected === correct) {
+    btn.classList.add('correct');
+    quizScore++;
+    document.getElementById('quizScoreNum').textContent = quizScore;
+  } else {
+    btn.classList.add('wrong');
+  }
+  document.getElementById('quizNextBtn').style.display = 'block';
+  document.getElementById('quizProgressBar').style.width = `${((quizIndex+1)/quizQuestions.length)*100}%`;
+}
+
+function nextQuiz() {
+  quizIndex++;
+  if (quizIndex >= quizQuestions.length) showQuizResult();
+  else showQuizQuestion();
+}
+
+function showQuizResult() {
+  document.getElementById('quizPlaying').style.display = 'none';
+  const result = document.getElementById('quizResult');
+  result.classList.add('show');
+  const pct = Math.round((quizScore / quizQuestions.length) * 100);
+  document.getElementById('resultScore').textContent = `${quizScore}/${quizQuestions.length}`;
+  const color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--accent3)' : 'var(--red)';
+  document.getElementById('resultScore').style.color = color;
+  const msgs = pct >= 90 ? ['완벽합니다! 🔥', '거의 다 외우셨네요. 합격이 눈 앞!'] :
+               pct >= 70 ? ['잘 하셨어요! 👍', '조금만 더 반복하면 완벽해집니다.'] :
+               pct >= 50 ? ['절반은 맞혔어요 💪', '카드 암기 모드로 틀린 것을 집중 복습하세요.'] :
+               ['더 연습이 필요해요 📚', '처음부터 카드 모드로 차근차근 시작해보세요!'];
+  document.getElementById('resultMsg').textContent = msgs[0];
+  document.getElementById('resultSub').textContent = msgs[1] + ` (정답률 ${pct}%)`;
+}
+
+// ══════════════════════════════════════════════════
+// REACTION DATA (최다출제 80선)
+// ══════════════════════════════════════════════════
+const RXN_DATA = [
+  // ── 1류 산화성 고체 (15개) ──
+  { cls:'1', substance:'염소산칼륨 (KClO₃)', freq:'★★★',
+    eq:'2KClO₃ → 2KCl + 3O₂↑',
+    desc:'가열 또는 MnO₂ 촉매로 분해되어 산소 발생. 조연성 물질 생성.',
+    cond:'가열 또는 MnO₂ 촉매' },
+  { cls:'1', substance:'과산화칼륨 (K₂O₂)', freq:'★★★',
+    eq:'2K₂O₂ + 2H₂O → 4KOH + O₂↑',
+    desc:'물과 반응 시 KOH(강알칼리)와 산소 발생. 발열 반응.',
+    cond:'물과 접촉' },
+  { cls:'1', substance:'과산화나트륨 (Na₂O₂)', freq:'★★★',
+    eq:'2Na₂O₂ + 2H₂O → 4NaOH + O₂↑',
+    desc:'물과 반응 시 강알칼리성 NaOH와 산소 발생. 화재 위험.',
+    cond:'물과 접촉' },
+  { cls:'1', substance:'과산화나트륨 (Na₂O₂) + CO₂', freq:'★★★',
+    eq:'2Na₂O₂ + 2CO₂ → 2Na₂CO₃ + O₂↑',
+    desc:'CO₂와 반응하여 산소 발생. 산소 공급원으로 활용.',
+    cond:'CO₂와 반응' },
+  { cls:'1', substance:'질산칼륨 (KNO₃)', freq:'★★★',
+    eq:'2KNO₃ → 2KNO₂ + O₂↑',
+    desc:'강한 산화제. 흑색화약(KNO₃+S+C) 성분.',
+    cond:'400°C 이상 가열' },
+  { cls:'1', substance:'질산암모늄 (NH₄NO₃)', freq:'★★★',
+    eq:'2NH₄NO₃ → 2N₂ + 4H₂O + O₂↑  (또는 N₂O + 2H₂O)',
+    desc:'충격·가열 시 폭발적 분해. ANFO 폭약 원료.',
+    cond:'200°C 이상 또는 충격' },
+  { cls:'1', substance:'과염소산칼륨 (KClO₄)', freq:'★★',
+    eq:'KClO₄ → KCl + 2O₂↑',
+    desc:'염소산칼륨보다 안정하나 고온에서 분해. 로켓 추진제.',
+    cond:'600°C 이상 가열' },
+  { cls:'1', substance:'과망가니즈산칼륨 (KMnO₄)', freq:'★★★',
+    eq:'2KMnO₄ → K₂MnO₄ + MnO₂ + O₂↑',
+    desc:'240°C에서 분해. 진한 황산 접촉 시 폭발 위험.',
+    cond:'가열 또는 진한 H₂SO₄ 접촉' },
+  { cls:'1', substance:'과망가니즈산칼륨 + H₂O₂', freq:'★★',
+    eq:'2KMnO₄ + 5H₂O₂ + 3H₂SO₄ → 2MnSO₄ + K₂SO₄ + 5O₂↑ + 8H₂O',
+    desc:'산성 조건에서 H₂O₂를 산화. 산소 발생.',
+    cond:'산성(H₂SO₄) 조건' },
+  { cls:'1', substance:'다이크로뮴산칼륨 (K₂Cr₂O₇)', freq:'★★',
+    eq:'4K₂Cr₂O₇ → 4K₂CrO₄ + 2Cr₂O₃ + 3O₂↑',
+    desc:'500°C 이상 가열 시 분해. 강산화제. 피부 부식성.',
+    cond:'500°C 이상' },
+  { cls:'1', substance:'브로민산칼륨 (KBrO₃)', freq:'★★',
+    eq:'2KBrO₃ → 2KBr + 3O₂↑',
+    desc:'370°C에서 분해. 산소 방출로 화재 위험.',
+    cond:'370°C 이상 가열' },
+  { cls:'1', substance:'과아이오딘산 (HIO₄)', freq:'★',
+    eq:'HIO₄ → HIO₃ + O  (→ 산화반응 촉진)',
+    desc:'강산화제. 유기물과 접촉 시 발화 위험.',
+    cond:'유기물 접촉 또는 가열' },
+  { cls:'1', substance:'삼산화크로뮴 (CrO₃)', freq:'★★',
+    eq:'4CrO₃ → 2Cr₂O₃ + 3O₂↑',
+    desc:'가연물과 접촉 시 자연발화. 강산화제.',
+    cond:'가연물 접촉 또는 250°C' },
+  { cls:'1', substance:'염소산나트륨 (NaClO₃)', freq:'★★',
+    eq:'2NaClO₃ → 2NaCl + 3O₂↑',
+    desc:'제초제 성분. 가열 분해 시 산소 방출.',
+    cond:'300°C 이상 가열' },
+  { cls:'1', substance:'과염소산나트륨 (NaClO₄)', freq:'★',
+    eq:'NaClO₄ → NaCl + 2O₂↑',
+    desc:'482°C에서 분해. 흡습성 강함.',
+    cond:'482°C 이상' },
+
+  // ── 2류 가연성 고체 (10개) ──
+  { cls:'2', substance:'황 (S) 연소', freq:'★★★',
+    eq:'S + O₂ → SO₂',
+    desc:'파란 불꽃으로 연소. 이산화황(SO₂) 발생. 독성 기체.',
+    cond:'점화' },
+  { cls:'2', substance:'황화인 P₄S₃ 연소', freq:'★★★',
+    eq:'P₄S₃ + 8O₂ → P₄O₁₀ + 3SO₂',
+    desc:'성냥 원료. 연소 시 P₄O₁₀(오산화인)과 SO₂ 생성.',
+    cond:'점화' },
+  { cls:'2', substance:'적린 (P) 연소', freq:'★★★',
+    eq:'4P + 5O₂ → P₄O₁₀(오산화인, P₂O₅)',
+    desc:'260°C 이상에서 연소. 흰 연기(P₄O₁₀) 발생. 독성.',
+    cond:'260°C 이상' },
+  { cls:'2', substance:'철분 (Fe) 연소', freq:'★★',
+    eq:'3Fe + 2O₂ → Fe₃O₄  (또는 2Fe + O₂ → 2FeO)',
+    desc:'분말 상태 특히 위험. 550°C 이상에서 연소.',
+    cond:'분말 + 점화원' },
+  { cls:'2', substance:'마그네슘 (Mg) 연소', freq:'★★★',
+    eq:'2Mg + O₂ → 2MgO',
+    desc:'밝은 백색광으로 연소. 물과도 반응.',
+    cond:'점화' },
+  { cls:'2', substance:'마그네슘 + 물', freq:'★★★',
+    eq:'Mg + 2H₂O → Mg(OH)₂ + H₂↑',
+    desc:'뜨거운 물 또는 수증기와 반응하여 수소 발생. 화재 위험.',
+    cond:'물(100°C 이상) 접촉' },
+  { cls:'2', substance:'알루미늄 분말 (Al) 연소', freq:'★★★',
+    eq:'4Al + 3O₂ → 2Al₂O₃',
+    desc:'테르밋 반응 원료. 산화 발열량 매우 큼.',
+    cond:'점화' },
+  { cls:'2', substance:'알루미늄 + 물', freq:'★★',
+    eq:'2Al + 6H₂O → 2Al(OH)₃ + 3H₂↑',
+    desc:'산화피막 제거 시 물과 반응. 수소 발생.',
+    cond:'강산/강알칼리 수용액' },
+  { cls:'2', substance:'아연 분말 (Zn) 연소', freq:'★★',
+    eq:'2Zn + O₂ → 2ZnO',
+    desc:'청백색 불꽃으로 연소. ZnO 흰 연기 발생.',
+    cond:'점화' },
+  { cls:'2', substance:'오황화인 (P₂S₅) + 물', freq:'★★',
+    eq:'P₂S₅ + 8H₂O → 2H₃PO₄ + 5H₂S↑',
+    desc:'물과 반응하여 황화수소(H₂S) 독성 기체 발생.',
+    cond:'물과 접촉' },
+
+  // ── 3류 자연발화 및 금수성 물질 (15개) ──
+  { cls:'3', substance:'칼륨 (K) + 물', freq:'★★★',
+    eq:'2K + 2H₂O → 2KOH + H₂↑',
+    desc:'격렬하게 반응. 수소 발생 + 발열 → 발화. 소화에 물 절대 금지.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'나트륨 (Na) + 물', freq:'★★★',
+    eq:'2Na + 2H₂O → 2NaOH + H₂↑',
+    desc:'물과 격렬 반응. 수소 발생. 발열로 자연발화 가능.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'칼륨 (K) + 알코올', freq:'★★',
+    eq:'2K + 2C₂H₅OH → 2C₂H₅OK + H₂↑',
+    desc:'알코올과 반응하여 수소 발생. 발화 위험.',
+    cond:'알코올 접촉' },
+  { cls:'3', substance:'황린 (P₄) 자연발화', freq:'★★★',
+    eq:'P₄ + 5O₂ → P₄O₁₀',
+    desc:'공기 중 34°C에서 자연발화. 물속 보관 필수. 백색 연기.',
+    cond:'공기 노출 (34°C)' },
+  { cls:'3', substance:'황린 + NaOH', freq:'★★',
+    eq:'P₄ + 3NaOH + 3H₂O → PH₃↑ + 3NaH₂PO₂',
+    desc:'알칼리와 반응하여 인화수소(PH₃) 독성·가연성 기체 발생.',
+    cond:'강알칼리 수용액' },
+  { cls:'3', substance:'트리에틸알루미늄 (TEA) + 물', freq:'★★★',
+    eq:'(C₂H₅)₃Al + 3H₂O → Al(OH)₃ + 3C₂H₆↑',
+    desc:'물과 격렬 반응. 에탄(C₂H₆) 가연성 기체 발생. 자연발화.',
+    cond:'물 또는 공기 접촉' },
+  { cls:'3', substance:'트리에틸알루미늄 + 공기', freq:'★★★',
+    eq:'2(C₂H₅)₃Al + 21O₂ → Al₂O₃ + 12CO₂ + 15H₂O',
+    desc:'공기 중 자연발화. 강력한 발열 반응.',
+    cond:'공기 노출' },
+  { cls:'3', substance:'수소화나트륨 (NaH) + 물', freq:'★★★',
+    eq:'NaH + H₂O → NaOH + H₂↑',
+    desc:'물과 반응하여 수소 발생. 발열 반응.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'수소화칼슘 (CaH₂) + 물', freq:'★★★',
+    eq:'CaH₂ + 2H₂O → Ca(OH)₂ + 2H₂↑',
+    desc:'물과 반응하여 다량 수소 발생. 발열.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'인화칼슘 (Ca₃P₂) + 물', freq:'★★★',
+    eq:'Ca₃P₂ + 6H₂O → 3Ca(OH)₂ + 2PH₃↑',
+    desc:'물과 반응하여 포스핀(PH₃) 독성·가연성 발생. 자연발화 가능.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'탄화칼슘 (CaC₂) + 물', freq:'★★★',
+    eq:'CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑',
+    desc:'물과 반응하여 아세틸렌(C₂H₂) 가연성 기체 발생.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'탄화알루미늄 (Al₄C₃) + 물', freq:'★★',
+    eq:'Al₄C₃ + 12H₂O → 4Al(OH)₃ + 3CH₄↑',
+    desc:'물과 반응하여 메탄(CH₄) 가연성 기체 발생.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'리튬 (Li) + 물', freq:'★★',
+    eq:'2Li + 2H₂O → 2LiOH + H₂↑',
+    desc:'알칼리금속 중 가장 느리게 반응. 수소 발생.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'칼슘 (Ca) + 물', freq:'★★',
+    eq:'Ca + 2H₂O → Ca(OH)₂ + H₂↑',
+    desc:'물과 반응하여 수산화칼슘과 수소 발생.',
+    cond:'물과 접촉' },
+  { cls:'3', substance:'디에틸아연 (Et₂Zn) + 물', freq:'★',
+    eq:'(C₂H₅)₂Zn + 2H₂O → Zn(OH)₂ + 2C₂H₆↑',
+    desc:'유기금속화합물. 공기·물과 자연발화 반응.',
+    cond:'공기/물 접촉' },
+
+  // ── 4류 인화성 액체 (15개) ──
+  { cls:'4', substance:'이황화탄소 (CS₂) 연소', freq:'★★★',
+    eq:'CS₂ + 3O₂ → CO₂ + 2SO₂',
+    desc:'인화점 -30°C. 연소 시 CO₂와 SO₂(독성) 발생.',
+    cond:'점화 (인화점 -30°C)' },
+  { cls:'4', substance:'아세트알데히드 (CH₃CHO) 산화', freq:'★★★',
+    eq:'2CH₃CHO + O₂ → 2CH₃COOH (아세트산)',
+    desc:'산화되면 아세트산 생성. 인화점 -38°C. 산화·중합 주의.',
+    cond:'산화 조건' },
+  { cls:'4', substance:'아세틸렌 (C₂H₂) 연소', freq:'★★★',
+    eq:'2C₂H₂ + 5O₂ → 4CO₂ + 2H₂O',
+    desc:'폭발범위 2.5~81%. 산소-아세틸렌 용접에 활용.',
+    cond:'점화' },
+  { cls:'4', substance:'메탄올 (CH₃OH) 연소', freq:'★★★',
+    eq:'2CH₃OH + 3O₂ → 2CO₂ + 4H₂O',
+    desc:'무색 불꽃으로 연소. 독성 강함. 인화점 11°C.',
+    cond:'점화' },
+  { cls:'4', substance:'에탄올 (C₂H₅OH) 연소', freq:'★★★',
+    eq:'C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O',
+    desc:'인화점 13°C. 파란 불꽃으로 연소.',
+    cond:'점화' },
+  { cls:'4', substance:'벤젠 (C₆H₆) 연소', freq:'★★★',
+    eq:'2C₆H₆ + 15O₂ → 12CO₂ + 6H₂O',
+    desc:'불완전연소 시 그을음 많이 발생. 발암물질.',
+    cond:'점화' },
+  { cls:'4', substance:'아세톤 (CH₃COCH₃) 연소', freq:'★★★',
+    eq:'(CH₃)₂CO + 4O₂ → 3CO₂ + 3H₂O',
+    desc:'인화점 -18°C. 폭발범위 2.5~13%.',
+    cond:'점화' },
+  { cls:'4', substance:'사이안화수소 (HCN) 연소', freq:'★★',
+    eq:'4HCN + 5O₂ → 4CO₂ + 2H₂O + 2N₂',
+    desc:'인화점 -17.8°C. 독성 극히 강함. 청산 성분.',
+    cond:'점화' },
+  { cls:'4', substance:'아닐린 (C₆H₅NH₂) 연소', freq:'★★',
+    eq:'4C₆H₅NH₂ + 35O₂ → 24CO₂ + 14H₂O + 2N₂',
+    desc:'인화점 70°C. 독성 물질. 염료 원료.',
+    cond:'점화' },
+  { cls:'4', substance:'톨루엔 (C₆H₅CH₃) 산화', freq:'★★',
+    eq:'C₆H₅CH₃ + 3O → C₆H₅COOH (안식향산)',
+    desc:'산화 시 벤조산 생성. 인화점 4°C.',
+    cond:'산화 조건' },
+  { cls:'4', substance:'메탄올 → 포름알데히드', freq:'★★',
+    eq:'CH₃OH + ½O₂ → HCHO + H₂O (산화)',
+    desc:'산화 시 포름알데히드(HCHO) 생성. 독성 물질.',
+    cond:'촉매 산화' },
+  { cls:'4', substance:'에탄올 → 아세트알데히드', freq:'★★',
+    eq:'C₂H₅OH + ½O₂ → CH₃CHO + H₂O (산화)',
+    desc:'산화 시 아세트알데히드 생성. 추가산화 시 아세트산.',
+    cond:'산화 조건' },
+  { cls:'4', substance:'에탄올 탈수 (에틸렌)', freq:'★★',
+    eq:'C₂H₅OH → CH₂=CH₂ + H₂O (160°C 이상)',
+    desc:'160°C 이상, H₂SO₄ 촉매로 에틸렌 생성.',
+    cond:'160°C, H₂SO₄ 촉매' },
+  { cls:'4', substance:'에스터화 반응', freq:'★★★',
+    eq:'CH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O',
+    desc:'아세트산+에탄올→아세트산에틸(에스터). 역반응=가수분해.',
+    cond:'H₂SO₄ 촉매, 가열' },
+  { cls:'4', substance:'피리딘 (C₅H₅N) 연소', freq:'★',
+    eq:'4C₅H₅N + 25O₂ → 20CO₂ + 10H₂O + 2N₂',
+    desc:'인화점 20°C. 악취 강함. 수용성.',
+    cond:'점화' },
+
+  // ── 5류 자기반응성 물질 (15개) ──
+  { cls:'5', substance:'TNT (트리니트로톨루엔) 폭발', freq:'★★★',
+    eq:'2C₇H₅N₃O₆ → 12CO + 5H₂ + 3N₂ + 2C  (불완전 분해)',
+    desc:'폭발 시 CO, H₂, N₂, C(탄소) 발생. 공기 없이 자기분해.',
+    cond:'충격·마찰·열 (300°C)' },
+  { cls:'5', substance:'피크린산 TNP 폭발', freq:'★★★',
+    eq:'2C₆H₂(NO₂)₃OH → 12CO + 2H₂ + 3N₂ + C + ...',
+    desc:'금속염(피크린산납 등)은 더욱 예민. 단독보다 금속염이 위험.',
+    cond:'충격·마찰·가열 (300°C)' },
+  { cls:'5', substance:'니트로글리세린 (NG) 폭발', freq:'★★★',
+    eq:'4C₃H₅N₃O₉ → 12CO₂ + 10H₂O + 6N₂ + O₂',
+    desc:'다이나마이트 원료. 충격에 예민. 약 218°C에서 폭발.',
+    cond:'충격 또는 218°C' },
+  { cls:'5', substance:'니트로셀룰로오스 연소', freq:'★★★',
+    eq:'[C₆H₇O₂(ONO₂)₃]ₙ → 6nCO₂ + nH₂O + 3n/2 N₂  (완전)',
+    desc:'면화약. 공기 없이 자기연소. 셀룰로이드 원료.',
+    cond:'충격·마찰·열 (160°C)' },
+  { cls:'5', substance:'질산메틸 분해', freq:'★★',
+    eq:'2CH₃ONO₂ → 2CO₂ + 2H₂O + N₂ + ... (폭발)',
+    desc:'인화점 -18°C. 충격·가열 시 폭발적 분해.',
+    cond:'충격·가열' },
+  { cls:'5', substance:'과산화벤조일 (BPO) 분해', freq:'★★★',
+    eq:'(C₆H₅CO)₂O₂ → 2C₆H₅CO₂•  (자유라디칼)',
+    desc:'70°C 이상에서 분해 개시. 개시제로 사용. 가연물 접촉 발화.',
+    cond:'70°C 이상 또는 가연물 접촉' },
+  { cls:'5', substance:'과초산 (CH₃COOOH) 분해', freq:'★★',
+    eq:'CH₃CO₃H → CH₃COOH + ½O₂',
+    desc:'100°C에서 분해. 산화제 + 가연물 동시 성질.',
+    cond:'100°C 이상' },
+  { cls:'5', substance:'아지드화납 (Pb(N₃)₂) 폭발', freq:'★★',
+    eq:'Pb(N₃)₂ → Pb + 3N₂↑  (폭발)',
+    desc:'금속아지화물. 기폭제로 사용. 충격에 극히 예민.',
+    cond:'충격·마찰·열' },
+  { cls:'5', substance:'하이드록실아민 (NH₂OH) 분해', freq:'★★',
+    eq:'2NH₂OH → N₂ + 2H₂O + H₂  (또는 폭발적 분해)',
+    desc:'130°C에서 폭발적 분해. 강산화제와 접촉 위험.',
+    cond:'130°C 이상 또는 불순물 존재' },
+  { cls:'5', substance:'질산구아니딘 폭발', freq:'★',
+    eq:'CH₆N₄O₃ → CO₂ + 2H₂O + 2N₂ + H₂  (근사)',
+    desc:'폭발물 원료. 가열·충격 시 폭발.',
+    cond:'충격·가열' },
+  { cls:'5', substance:'TNT + Na 반응', freq:'★',
+    eq:'C₇H₅N₃O₆ + Na → (나트륨 염 형성) → 더 민감해짐',
+    desc:'금속과 반응 시 예민한 염 형성. 알칼리금속 접촉 금지.',
+    cond:'알칼리금속 접촉' },
+  { cls:'5', substance:'디아조메탄 분해', freq:'★',
+    eq:'CH₂N₂ → CH₂: (카르벤) + N₂↑',
+    desc:'폭발성. 광·열에 분해. 독성·발암성.',
+    cond:'광 또는 열' },
+  { cls:'5', substance:'아세틸렌화구리 폭발', freq:'★★',
+    eq:'C₂H₂ + 2Cu → Cu₂C₂ + H₂ (→ 충격 시 폭발)',
+    desc:'아세틸렌이 구리·은·수은과 폭발성 화합물 형성. 접촉 금지.',
+    cond:'충격·마찰' },
+  { cls:'5', substance:'메틸에틸케톤과산화물 (MEKPO)', freq:'★★',
+    eq:'분해 시 OH 라디칼 생성 → 격렬연소',
+    desc:'50°C 이상에서 분해. 희석제(DMP 60%) 혼합 보관.',
+    cond:'50°C 이상, 충격, 불순물' },
+  { cls:'5', substance:'과산화아세틸 분해', freq:'★',
+    eq:'(CH₃CO)₂O₂ → 2CH₃CO₂•  (라디칼 생성, 폭발)',
+    desc:'30°C에서 분해. 빛·열·충격에 매우 예민.',
+    cond:'30°C 이상 또는 충격' },
+
+  // ── 6류 산화성 액체 (10개) ──
+  { cls:'6', substance:'진한 질산 (HNO₃) 분해', freq:'★★★',
+    eq:'4HNO₃ → 4NO₂ + O₂ + 2H₂O  (빛 또는 가열)',
+    desc:'갈색 NO₂ 발생. 산화성 강함. 비산화물(분진)에 주의.',
+    cond:'빛 또는 가열 (120°C)' },
+  { cls:'6', substance:'질산 + 구리 (Cu)', freq:'★★★',
+    eq:'8HNO₃(묽) + 3Cu → 3Cu(NO₃)₂ + 2NO↑ + 4H₂O\n4HNO₃(진) + Cu → Cu(NO₃)₂ + 2NO₂↑ + 2H₂O',
+    desc:'묽은 질산→NO, 진한 질산→NO₂. 비금속에도 반응.',
+    cond:'금속과 접촉' },
+  { cls:'6', substance:'과산화수소 (H₂O₂) 분해', freq:'★★★',
+    eq:'2H₂O₂ → 2H₂O + O₂↑  (MnO₂ 촉매)',
+    desc:'농도 높을수록 폭발 위험. MnO₂ 촉매로 급격히 분해.',
+    cond:'MnO₂ 촉매 또는 가열' },
+  { cls:'6', substance:'과산화수소 + 가연물', freq:'★★★',
+    eq:'H₂O₂ + 가연물 → 산화(발화)',
+    desc:'유기물과 접촉 시 발화 또는 폭발. 강산화제.',
+    cond:'유기물 접촉' },
+  { cls:'6', substance:'과염소산 (HClO₄) 분해', freq:'★★★',
+    eq:'4HClO₄ → 4ClO₂ + 2H₂O + 3O₂  (200°C 이상)',
+    desc:'강산+강산화제. 가열 시 폭발적 분해.',
+    cond:'200°C 이상 또는 가연물' },
+  { cls:'6', substance:'과염소산 + 알코올', freq:'★★',
+    eq:'HClO₄ + ROH → 폭발성 에스터(과염소산에스터) 생성',
+    desc:'알코올과 반응 시 폭발성 과염소산에스터 형성.',
+    cond:'알코올 접촉' },
+  { cls:'6', substance:'불화수소산 (HF) + 유리', freq:'★★',
+    eq:'SiO₂ + 4HF → SiF₄ + 2H₂O',
+    desc:'유리(SiO₂)를 부식. 유리병 저장 불가. 폴리에틸렌 용기 사용.',
+    cond:'유리 접촉' },
+  { cls:'6', substance:'삼불화브로민 (BrF₃) + 물', freq:'★',
+    eq:'2BrF₃ + 3H₂O → HBrO₃ + 5HF + Br₂',
+    desc:'할로겐간화합물. 물과 격렬 반응. 산소 방출.',
+    cond:'물과 접촉' },
+  { cls:'6', substance:'발연 질산 + 암모니아', freq:'★★',
+    eq:'HNO₃ + NH₃ → NH₄NO₃  (→ 가열 시 폭발)',
+    desc:'발연질산과 암모니아 반응 시 폭발성 질산암모늄 생성.',
+    cond:'암모니아 접촉' },
+  { cls:'6', substance:'오불화브로민 (BrF₅) 반응', freq:'★',
+    eq:'2BrF₅ + Si → SiF₄ + 2BrF₂  (강산화)',
+    desc:'대부분의 원소를 불화물로 산화. 반응성 극히 강함.',
+    cond:'금속/비금속 접촉' },
+];
+
+
+
+// ── 분말 소화약제 ──
+const EX_DATA = [
+  // ─ 1종 ─
+  { sub:'제1종 분말 — 주성분 & 적용', freq:'★★★',
+    eq:'주성분: NaHCO₃ (탄산수소나트륨)\n적용화재: B·C급  비누화 가능\n착색: 백색\n암기: NKNK CC네 해피 농협CC',
+    desc:'탄산수소나트륨(중탄산소다). B·C급 화재 + 비누화 반응 가능. 착색은 백색.',
+    cond:'B·C급 화재', tag:'제1종분말' },
+  { sub:'제1종 분말 — 1차 열분해 (270°C)', freq:'★★★',
+    eq:'2NaHCO₃  →  Na₂CO₃ + H₂O + CO₂',
+    desc:'270°C에서 1차 분해. 탄산나트륨(Na₂CO₃) + 물 + 이산화탄소 생성. 질식·냉각 효과.',
+    cond:'270°C', tag:'제1종분말' },
+  { sub:'제1종 분말 — 2차 열분해 (850°C)', freq:'★★★',
+    eq:'2NaHCO₃  →  Na₂O + 2CO₂ + H₂O',
+    desc:'850°C 고온에서 2차 분해. 산화나트륨(Na₂O) + CO₂ 2몰 + 물 생성.',
+    cond:'850°C', tag:'제1종분말' },
+
+  // ─ 2종 ─
+  { sub:'제2종 분말 — 주성분 & 적용', freq:'★★★',
+    eq:'주성분: KHCO₃ (탄산수소칼륨)\n적용화재: B·C급\n착색: 보라색, 담회색',
+    desc:'탄산수소칼륨. B·C급 화재. 착색 보라색 또는 담회색.',
+    cond:'B·C급 화재', tag:'제2종분말' },
+  { sub:'제2종 분말 — 1차 열분해 (190°C)', freq:'★★★',
+    eq:'2KHCO₃  →  K₂CO₃ + CO₂ + H₂O',
+    desc:'190°C에서 1차 분해. 탄산칼륨(K₂CO₃) + 이산화탄소 + 물 생성.',
+    cond:'190°C', tag:'제2종분말' },
+  { sub:'제2종 분말 — 2차 열분해 (890°C)', freq:'★★★',
+    eq:'2KHCO₃  →  K₂O + 2CO₂ + H₂O',
+    desc:'890°C 고온에서 2차 분해. 산화칼륨(K₂O) + CO₂ 2몰 + 물 생성.',
+    cond:'890°C', tag:'제2종분말' },
+
+  // ─ 3종 ─
+  { sub:'제3종 분말 — 주성분 & 적용', freq:'★★★',
+    eq:'주성분: NH₄H₂PO₄ (인산암모늄) + 실리콘오일(발수제)\n적용화재: A·B·C급 + 억제 효과\n착색: 담홍색',
+    desc:'제1인산암모늄. 유일한 A·B·C급 만능 분말. 실리콘오일 발수제 함유. 착색 담홍색.',
+    cond:'A·B·C급 화재', tag:'제3종분말' },
+  { sub:'제3종 분말 — 1차 열분해 (190°C)', freq:'★★★',
+    eq:'NH₄H₂PO₄  →  H₃PO₄ + NH₃',
+    desc:'190°C에서 1차 분해. 오르토인산(H₃PO₄) + 암모니아(NH₃) 생성.',
+    cond:'190°C', tag:'제3종분말' },
+  { sub:'제3종 분말 — 2차 열분해 (215°C)', freq:'★★★',
+    eq:'2H₃PO₄  →  H₄P₂O₇ + H₂O',
+    desc:'215°C에서 2차 분해. 피로인산(H₄P₂O₇) + 물 생성.',
+    cond:'215°C', tag:'제3종분말' },
+  { sub:'제3종 분말 — 3차 열분해 (300°C)', freq:'★★★',
+    eq:'H₄P₂O₇  →  2HPO₃ + H₂O',
+    desc:'300°C에서 3차 분해. 메타인산(HPO₃) + 물 생성.',
+    cond:'300°C', tag:'제3종분말' },
+  { sub:'제3종 분말 — 완전분해 (종합)', freq:'★★★',
+    eq:'NH₄H₂PO₄  →  HPO₃ + NH₃ + H₂O',
+    desc:'완전 분해 종합식. 최종 생성된 메타인산(HPO₃)이 가연물 표면에 유리질 피막 형성 → 공기 차단(질식).',
+    cond:'완전 열분해', tag:'제3종분말' },
+
+  // ─ 4종 ─
+  { sub:'제4종 분말 — 주성분 & 적용', freq:'★★★',
+    eq:'주성분: KHCO₃ + (NH₂)₂CO (탄수소칼륨 & 요소의 반응생성물)\n적용화재: B·C급\n착색: 회색',
+    desc:'탄산수소칼륨 + 요소 혼합물. B·C급 화재. 착색 회색. 제2종 개량형.',
+    cond:'B·C급 화재', tag:'제4종분말' },
+  { sub:'제4종 분말 — 열분해', freq:'★★★',
+    eq:'2KHCO₃ + (NH₂)₂CO  →  K₂CO₃ + 2NH₃ + 2CO₂ + H₂O',
+    desc:'가열 시 탄산칼륨 + 암모니아 2몰 + CO₂ 2몰 + 물 생성. NH₃·CO₂ 다량 발생으로 소화 효과 우수.',
+    cond:'가열 시', tag:'제4종분말' },
+];
+
+let rxnFilter = 'all';
+
+function filterRxn(cls, btn) {
+  rxnFilter = cls;
+  document.querySelectorAll('.rxn-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRxn(cls);
+}
+
+function renderRxn(cls) {
+  const container = document.getElementById('rxnContent');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const groups = {
+    '1': {label:'1류 — 산화성 고체', badge:'badge-1', icon:'1류'},
+    '2': {label:'2류 — 가연성 고체', badge:'badge-2', icon:'2류'},
+    '3': {label:'3류 — 자연발화 및 금수성', badge:'badge-3', icon:'3류'},
+    '4': {label:'4류 — 인화성 액체', badge:'badge-4', icon:'4류'},
+    '5': {label:'5류 — 자기반응성 물질', badge:'badge-5', icon:'5류'},
+    '6': {label:'6류 — 산화성 액체', badge:'badge-6', icon:'6류'},
+    'ex': {label:'소화약제 — 화학반응식', badge:'badge-ex', icon:'🧯'},
+  };
+
+  const freqMap = {'★★★':'freq-high','★★':'freq-mid','★':'freq-low'};
+  const freqLabel = {'★★★':'최빈출','★★':'빈출','★':'출제'};
+
+  if (cls === 'all') {
+    // Render 1–6 class sections
+    ['1','2','3','4','5','6'].forEach((c, i) => {
+      const items = RXN_DATA.filter(r => r.cls === c);
+      if (!items.length) return;
+      const g = groups[c];
+      const sec = document.createElement('div');
+      sec.className = 'rxn-section';
+      sec.style.animationDelay = `${i * 0.05}s`;
+      sec.innerHTML = buildRxnSection(g, c, items, freqMap, freqLabel);
+      container.appendChild(sec);
+    });
+    // Also render extinguisher section at bottom
+    const exSec = document.createElement('div');
+    exSec.className = 'rxn-section';
+    exSec.style.animationDelay = '0.35s';
+    exSec.innerHTML = buildExSection(groups['ex'], EX_DATA, freqMap, freqLabel);
+    container.appendChild(exSec);
+  } else if (cls === 'ex') {
+    const exSec = document.createElement('div');
+    exSec.className = 'rxn-section';
+    exSec.innerHTML = buildExSection(groups['ex'], EX_DATA, freqMap, freqLabel);
+    container.appendChild(exSec);
+  } else {
+    const items = RXN_DATA.filter(r => r.cls === cls);
+    if (!items.length) return;
+    const sec = document.createElement('div');
+    sec.className = 'rxn-section';
+    sec.innerHTML = buildRxnSection(groups[cls], cls, items, freqMap, freqLabel);
+    container.appendChild(sec);
+  }
+}
+
+function buildRxnSection(g, c, items, freqMap, freqLabel) {
+  return `
+    <div class="rxn-section-header">
+      <span class="class-badge ${g.badge}">${g.icon}</span>
+      <h3>${g.label}</h3>
+      <span class="rxn-count">${items.length}개</span>
+    </div>
+    <div class="rxn-grid">
+      ${items.map(r => `
+        <div class="rxn-card">
+          <div class="rxn-card-top">
+            <div class="rxn-substance">${r.substance}</div>
+            <span class="rxn-freq ${freqMap[r.freq]}">${freqLabel[r.freq]} ${r.freq}</span>
+          </div>
+          <div class="rxn-equation">${r.eq.replace(/\n/g,'<br>')}</div>
+          <div class="rxn-desc">${r.desc}</div>
+          ${r.cond ? `<div class="rxn-condition">⚗ 조건: ${r.cond}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+// Group extinguisher cards by tag category
+function buildExSection(g, items, freqMap, freqLabel) {
+  const tagGroups = [
+    { key: ['제1종분말'], label: '⬜ 제1종 분말 — NaHCO₃ 탄산수소나트륨 · B·C급 · 백색', color: '#e0e0e0' },
+    { key: ['제2종분말'], label: '🟣 제2종 분말 — KHCO₃ 탄산수소칼륨 · B·C급 · 보라색/담회색', color: '#c084fc' },
+    { key: ['제3종분말'], label: '🩷 제3종 분말 — NH₄H₂PO₄ 인산암모늄 · A·B·C급(만능) · 담홍색', color: '#f9a8d4' },
+    { key: ['제4종분말'], label: '🩶 제4종 분말 — KHCO₃+(NH₂)₂CO · B·C급 · 회색', color: '#94a3b8' },
+  ];
+
+  let html = `
+    <div class="rxn-section-header">
+      <span class="class-badge ${g.badge}" style="font-size:14px">${g.icon}</span>
+      <h3>${g.label}</h3>
+      <span class="rxn-count">${items.length}개</span>
+    </div>`;
+
+  tagGroups.forEach(tg => {
+    const filtered = items.filter(r => tg.key.includes(r.tag));
+    if (!filtered.length) return;
+    html += `
+      <div style="margin-bottom:24px;">
+        <div style="font-size:13px;font-weight:700;color:${tg.color};margin-bottom:12px;
+          padding:8px 14px;background:rgba(255,255,255,.04);border-radius:8px;
+          border-left:3px solid ${tg.color};">${tg.label}
+          <span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:8px;">${filtered.length}개</span>
+        </div>
+        <div class="rxn-grid">
+          ${filtered.map(r => `
+            <div class="rxn-card" style="border-color:rgba(255,255,255,.06);">
+              <div class="rxn-card-top">
+                <div class="rxn-substance">${r.sub}</div>
+                <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+                  <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border);">${r.tag}</span>
+                  <span class="rxn-freq ${freqMap[r.freq]}">${freqLabel[r.freq]} ${r.freq}</span>
+                </div>
+              </div>
+              <div class="rxn-equation">${r.eq.replace(/\n/g,'<br>')}</div>
+              <div class="rxn-desc">${r.desc}</div>
+              ${r.cond ? `<div class="rxn-condition">🔥 적용: ${r.cond}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  });
+
+  return html;
+}
+function toggleTips() {
+  document.getElementById('tipsPanel').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+setLevel(1);
+setMode('table');
+updateStats();
+</script>
+</body>
+</html>
